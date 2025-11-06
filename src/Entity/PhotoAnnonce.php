@@ -4,6 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PhotoAnnonceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use mysql_xdevapi\Warning;
+use PHPUnit\Framework\TestStatus\Error;
+use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\Mime\Part\File;
 
 #[ORM\Entity(repositoryClass: PhotoAnnonceRepository::class)]
 class PhotoAnnonce
@@ -19,14 +24,6 @@ class PhotoAnnonce
 
     #[ORM\Column(length: 255)]
     private ?string $path = null;
-
-    #[ORM\PostRemove]
-    public function postRemoveFile() {
-        $path = "/public/$this->path";
-        if (!unlink($path)) {
-            trigger_error("FILE NOT DELETED", E_USER_WARNING);
-        };
-    }
 
     public function getId(): ?int
     {

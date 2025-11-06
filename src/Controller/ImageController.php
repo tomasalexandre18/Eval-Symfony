@@ -6,6 +6,7 @@ use App\Entity\Annonce;
 use App\Entity\PhotoAnnonce;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ImageController extends AbstractController
 {
     #[Route('/{id}', name: 'app_image_delete', methods: ['POST'])]
-    public function delete(Request $request, PhotoAnnonce $photo, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, PhotoAnnonce $photo, EntityManagerInterface $entityManager, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imageDirectory): Response
     {
         if ($photo->getAnnonce()->getUser() != $this->getUser()) {
             # tentative de suppression par usurpation
@@ -22,6 +23,7 @@ final class ImageController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$photo->getId(), $request->getPayload()->getString('_token'))) {
+            AnnonceController::deleteImage($photo, $imageDirectory);
             $entityManager->remove($photo);
             $entityManager->flush();
         }

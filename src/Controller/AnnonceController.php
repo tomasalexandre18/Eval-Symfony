@@ -127,8 +127,16 @@ final class AnnonceController extends AbstractController
         }
     }
 
+    public static function deleteImage(PhotoAnnonce $image, $imageDirectory) {
+        return; // ne fonctionne pas
+        $path = "$imageDirectory/public".$image->getPath();
+        if (!unlink($path)) {
+            trigger_error("FILE NOT DELETED $path", E_USER_WARNING);
+        };
+    }
+
     #[Route('/{id}', name: 'app_annonce_delete', methods: ['POST'])]
-    public function delete(Request $request, Annonce $annonce, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Annonce $annonce, EntityManagerInterface $entityManager, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imageDirectory): Response
     {
         if ($annonce->getUser() != $this->getUser()) {
             # tentative de suppression par usurpation
@@ -136,6 +144,9 @@ final class AnnonceController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$annonce->getId(), $request->getPayload()->getString('_token'))) {
+            foreach ($annonce->getPhotoAnnonces() as $image) {
+                $this->deleteImage($image, $imageDirectory);
+            }
             $entityManager->remove($annonce);
             $entityManager->flush();
         }
