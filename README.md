@@ -1,5 +1,8 @@
 Installation
 
+pour l'installation il faut le client symfony disponible dans les variables d'environment
+***[installation](https://symfony.com/download)***
+
 git clone
 
 creer .env
@@ -29,3 +32,9 @@ symfony console app:create-admin admin@test.com admin
 cela permet de mettre en place la DB avec un utilisateur admin
 email: admin@test.com
 mdp: admin
+
+Lancer le server
+
+```bash
+symfony serve
+```
