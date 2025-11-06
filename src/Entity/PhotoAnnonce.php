@@ -20,6 +20,14 @@ class PhotoAnnonce
     #[ORM\Column(length: 255)]
     private ?string $path = null;
 
+    #[ORM\PostRemove]
+    public function postRemoveFile() {
+        $path = "/public/$this->path";
+        if (!unlink($path)) {
+            trigger_error("FILE NOT DELETED", E_USER_WARNING);
+        };
+    }
+
     public function getId(): ?int
     {
         return $this->id;
