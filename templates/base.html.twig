@@ -14,6 +14,45 @@
         {% endblock %}
     </head>
     <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <p class="navbar-brand">
+        <a href="/">L’AUTREBONCOIN</a>
+        {% if app.user %}
+         - {{ app.user.email }}
+        {% endif %}
+        </p>
+        <div class="" id="navbarNavDropdown">
+            <ul class="navbar-nav d-flex flex-row gap-3">
+                {% if is_granted("ROLE_ADMIN") %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_annonce_index") }}">Gerer Les Annonces</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_categorie_annonce_index") }}">Gerer les catégorie</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_user") }}">Gerer les utilisateurs</a>
+                    </li>
+                {% elseif is_granted("ROLE_USER") %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_annonce_index") }}">Mes Annonces</a>
+                    </li>
+                {% endif %}
+                {% if app.user %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_logout") }}">Se Déconnecter</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_login") }}">Se Connecter</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path("app_register") }}">S'enregistrer</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="alert alert-{{ label }}">

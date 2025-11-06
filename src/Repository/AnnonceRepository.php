@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Annonce;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,23 @@ class AnnonceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByName($name): array {
+        return $this->findByNameAndUser(null, $name);
+    }
+    public function findByNameAndUser(?User $user, ?string $name): array {
+        $query = $this->createQueryBuilder('a');
+        if ($user) {
+            $query->andWhere("a.user = :user")
+                ->setParameter("user", $user->getId());
+        }
+        if ($name) {
+            $query->andWhere('a.titre LIKE :name')
+                ->setParameter(':name', "%$name%");
+        }
+
+        return $query
+            ->getQuery()
+            ->getResult();
+    }
 }

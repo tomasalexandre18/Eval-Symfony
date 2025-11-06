@@ -3,8 +3,13 @@
 {% block title %}Annonce index{% endblock %}
 
 {% block body %}
-    <h1>Les annonce public index</h1>
-
+    <h1>Les annonce public</h1>
+    <form action="{{ path("app_index") }}" method="get">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Rechercher ..." value="{{ query }}" name="query">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+    </form>
     <table class="table">
         <thead>
         <tr>

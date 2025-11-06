@@ -44,7 +44,7 @@ class CreateAdminUser
         $user = new User();
         $user->setNom("admin");
         $user->setPrenom("admin");
-        $user->setRoles(["ADMIN_ROLE"]);
+        $user->setRoles(["ROLE_ADMIN"]);
         $user->setEmail($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setRue("admin");
