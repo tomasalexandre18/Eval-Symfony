@@ -20,7 +20,8 @@ Remplacer DATABASE_URL avec la bonne url
 executer
 
 ```bash
-symfony console doctrine:databse:create
+symfony composer install
+symfony console doctrine:database:create
 symfony console doctrine:migrations:migrate
 symfony console app:create-admin admin@test.com admin
 ```
